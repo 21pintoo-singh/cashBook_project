@@ -11,10 +11,7 @@ const getBooks = async (req, res) => {
     //👇 for query part
     let data = req.query;
     if (Object.keys(data).length > 0) {
-        if (!data.name && !data.remark) return res.status(400).send({
-            status: true,
-            message: "You can only search data by Name and Remarks"
-        })
+        if (!data.name && !data.remark) return unsuccess(res, 400, "You can only search data by Name and Remarks")
 
         query['$or'] = [{
             name: data.name
@@ -26,16 +23,30 @@ const getBooks = async (req, res) => {
     try {
         //👇 create user in users DB
         const getBooksList = await bookModule.find(query);
-        res.status(200).send({
-            status: true,
-            data: getBooksList
-        })
+        if (getBooksList.length == 0) return unsuccess(res, 404, "Book list not found")
+
+        success(res, 200, getBooksList)
     } catch (err) {
-        res.status(500).send({
-            status: !true,
-            message: err.message
-        })
+        unsuccess(res, 500, err.message)
     }
+}
+
+
+
+//👇 send success message
+const success = (res, status, msg) => {
+    return res.status(status).send({
+        status: true,
+        data: msg
+    })
+}
+
+//👇 send unsuccess message
+const unsuccess = (res, status, msg) => {
+    return res.status(status).send({
+        status: !true,
+        message: msg
+    })
 }
 
 

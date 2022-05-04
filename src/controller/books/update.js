@@ -7,16 +7,8 @@ const updateBook = async (req, res) => {
     // bookId comes from params
     const bookId = req.params.bookId;
 
-    if (!bookId) return res.status(400).send({
-        status: !true,
-        message: "Post params required"
-    })
-
-    if (Object.keys(data).length == 0) return res.status(400).send({
-        status: !true,
-        message: "Post body required"
-    })
-
+    if (!bookId) return unsuccess(res, 400, "Post params required")
+    if (Object.keys(data).length == 0) return unsuccess(res, 400, "Post body required")
 
     //👇 my query here
     const query = {
@@ -25,14 +17,10 @@ const updateBook = async (req, res) => {
         isDelete: !true
     }
 
-
     try {
         // create user in users DB
         const bookObj = await bookModule.findOne(query);
-        if (!bookObj) return res.status(404).send({
-            status: !true,
-            message: "No book found"
-        })
+        if (!bookObj) return unsuccess(res, 400, "No book found")
 
         // overide data
         if (data.name) {
@@ -45,16 +33,28 @@ const updateBook = async (req, res) => {
 
         bookObj.save();
 
-        res.status(200).send({
-            status: true,
-            data: bookObj
-        })
+        success(res, 200, bookObj)
     } catch (err) {
-        res.status(500).send({
-            status: !true,
-            message: err.message
-        })
+        unsuccess(res, 500, err.message)
     }
+}
+
+
+
+//👇 send success message
+const success = (res, status, msg) => {
+    return res.status(status).send({
+        status: true,
+        data: msg
+    })
+}
+
+//👇 send unsuccess message
+const unsuccess = (res, status, msg) => {
+    return res.status(status).send({
+        status: !true,
+        message: msg
+    })
 }
 
 

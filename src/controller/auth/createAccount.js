@@ -4,53 +4,28 @@ const createAccount = async (req, res) => {
 
     //👇 Data comes from body
     const data = req.body;
-    if (Object.keys(data).length == 0) return res.status(400).send({
-        status: !true,
-        message: "Post body required"
-    })
-
-
-    if (!data.name || data.name.trim() == '') return res.status(400).send({
-        status: !true,
-        message: "Name must be required"
-    })
-
-    if (!data.phone || data.phone.trim() == '') return res.status(400).send({
-        status: !true,
-        message: "Phone number must be required"
-    })
-
-    if (!isValidMobile(data.phone)) return res.status(400).send({
-        status: !true,
-        message: "Invalid phone number, Try with a valid phone number"
-    })
-
-    if (!data.emailId || data.emailId.trim() == '') return res.status(400).send({
-        status: !true,
-        message: "Email address must be required"
-    })
-
-    if (!isValidEmail(data.emailId)) return res.status(400).send({
-        status: !true,
-        message: "Invalid email address, Try with a valid email address"
-    })
-
-    if (!data.password || data.password.trim() == '') return res.status(400).send({
-        status: !true,
-        message: "Password must be required"
-    })
+    if (Object.keys(data).length == 0) return unsuccess(res, 400, "Post body required")
+    if (!data.name || data.name.trim() == '') return unsuccess(res, 400, "Name must be required")
+    if (!data.phone || data.phone.trim() == '') return unsuccess(res, 400, "Phone number must be required")
+    if (!isValidMobile(data.phone)) return unsuccess(res, 400, "Invalid phone number, Try with a valid phone number")
+    if (!data.emailId || data.emailId.trim() == '') return unsuccess(res, 400, "Email address must be required")
+    if (!isValidEmail(data.emailId)) return unsuccess(res, 400, "Invalid email address, Try with a valid email address")
+    if (!data.password || data.password.trim() == '') return unsuccess(res, 400, "Password must be required")
 
     // 👇 email address already exist
-    let emailIsExist = userModule.findOne({
-        emailId: data.emailId
-    }).catch(_ => null)
+    if (await dbcheck(userModule, {
+            emailId: data.emailId
+        })) return unsuccess(res, 406, "Email address already exist");
 
-    if (emailIsExist) return res.status(406).send({
-        status: !true,
-        message: "Email address already exist"
-    })
+    // 👇 email address already exist
+    if (await dbcheck(userModule, {
+            phone: data.phone
+        })) return unsuccess(res, 406, "Phone Number already exist");
 
-    // 👇 extra  extra  extra  extra  extra
+
+
+
+    // 👇 add default values
     data.category = [{
         tagName: "Salary"
     }, {
@@ -68,15 +43,9 @@ const createAccount = async (req, res) => {
     try {
         //👇 create user in users DB
         const createUser = await userModule.create(data);
-        res.status(200).send({
-            status: true,
-            data: createUser
-        })
+        success(res, 201, createUser)
     } catch (err) {
-        res.status(500).send({
-            status: !true,
-            message: err.message
-        })
+        success(res, 500, err.message)
     }
 }
 
@@ -96,6 +65,29 @@ const isValidMobile = (number) => {
     return regEx.test(number)
 }
 
+//👇 validate db data
+const dbcheck = async (schema, query) => {
+    try {
+        return await schema.findOne(query)
+    } catch (err) {
+        return null
+    }
+}
 
+//👇 send success message
+const success = (res, status, msg) => {
+    return res.status(status).send({
+        status: true,
+        data: msg
+    })
+}
+
+//👇 send unsuccess message
+const unsuccess = (res, status, msg) => {
+    return res.status(status).send({
+        status: !true,
+        message: msg
+    })
+}
 
 module.exports = createAccount

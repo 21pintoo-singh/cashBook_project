@@ -5,21 +5,9 @@ const login = async (req, res) => {
 
     // Data comes from body
     const data = req.body;
-    if (Object.keys(data).length == 0) return res.status(400).send({
-        status: !true,
-        message: "Post body required"
-    })
-
-
-    if (!data.emailId || data.emailId.trim() == '') return res.status(400).send({
-        status: !true,
-        message: "Email address must be required"
-    })
-
-    if (!data.password || data.password.trim() == '') return res.status(400).send({
-        status: !true,
-        message: "Password must be required"
-    })
+    if (Object.keys(data).length == 0) return unsuccess(res, 400, "Post body required")
+    if (!data.emailId || data.emailId.trim() == '') return unsuccess(res, 400, "Email address must be required")
+    if (!data.password || data.password.trim() == '') return unsuccess(res, 400, "Password must be required")
 
 
     try {
@@ -30,37 +18,41 @@ const login = async (req, res) => {
         });
 
         // if unavailable
-        if (!findUser) return res.status(401).send({
-            status: !true,
-            message: "Wrong email address and password"
-        })
+        if (!findUser) return unsuccess(res, 401, "Wrong email address and password")
 
         // if user deleted
-        if (findUser.isDelete) return res.status(404).send({
-            status: !true,
-            message: "This account is unavailable OR may be deleted"
-        })
+        if (findUser.isDelete) return unsuccess(res, 404, "This account is unavailable OR may be deleted")
 
         // generate Token
         const token = jwt.sign({
             user: findUser._id
-        },"here-is-my-token-🤯")
+        }, "here-is-my-token-🤯")
 
-        if (!token) return res.status(500).send({
-            status: !true,
-            message: "Can't generate token, please try again"
-        })
+        if (!token) return unsuccess(res, 500, "Can't generate token, please try again")
 
-        res.status(200).send({
-            status: true,
-            data: token
-        })
+        success(res, 200, token)
+
     } catch (err) {
-        res.status(500).send({
-            status: !true,
-            message: err.message
-        })
+        unsuccess(res, 500, err.message)
     }
+}
+
+
+
+//👇 send success message
+const success = (res, status, msg) => {
+    return res.status(status).send({
+        status: true,
+        data: msg
+    })
+}
+
+//👇 send unsuccess message
+const unsuccess = (res, status, msg) => {
+    return res.status(status).send({
+        status: !true,
+        message: msg
+    })
 }
 
 

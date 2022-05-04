@@ -5,10 +5,7 @@ const deleteBook = async (req, res) => {
     //👇 bookId comes from params
     const bookId = req.params.bookId;
 
-    if (!bookId) return res.status(400).send({
-        status: !true,
-        message: "Post params required"
-    })
+    if (!bookId) return unsuccess(res, 400, "Post params required")
 
     //👇 my query here
     const query = {
@@ -21,25 +18,36 @@ const deleteBook = async (req, res) => {
     try {
         //👇 create user in users DB
         const bookObj = await bookModule.findOne(query);
-        if (!bookObj) return res.status(404).send({
-            status: !true,
-            message: "No book found"
-        })
+        if (!bookObj) return unsuccess(res, 404, "No book found")
 
         //👇 overide data
         bookObj.isDelete = true;
         bookObj.save();
 
-        res.status(200).send({
-            status: true,
-            data: "Book deleted successfully"
-        })
+        success(res, 200, "Book deleted successfull")
     } catch (err) {
-        res.status(500).send({
-            status: !true,
-            message: err.message
-        })
+        unsuccess(res, 500, err.message)
     }
+}
+
+
+
+
+
+//👇 send success message
+const success = (res, status, msg) => {
+    return res.status(status).send({
+        status: true,
+        data: msg
+    })
+}
+
+//👇 send unsuccess message
+const unsuccess = (res, status, msg) => {
+    return res.status(status).send({
+        status: !true,
+        message: msg
+    })
 }
 
 
