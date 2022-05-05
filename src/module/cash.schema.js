@@ -34,6 +34,11 @@ const cashschema = new mongoose.Schema({
         ref: 'book',
         required: "Book ID is mandatory"
     },
+    type: {
+        type: String,
+        required: true,
+        enum: ["IN", "OUT"]
+    },
     isDeleted: {
         type: Boolean,
         trim: true,

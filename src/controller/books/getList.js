@@ -22,7 +22,7 @@ const getBooks = async (req, res) => {
 
     try {
         //👇 create user in users DB
-        const getBooksList = await bookModule.find(query);
+        const getBooksList = await bookModule.find(query).sort([['timeStamp', -1]]);
         if (getBooksList.length == 0) return unsuccess(res, 404, "Book list not found")
 
         success(res, 200, getBooksList)
