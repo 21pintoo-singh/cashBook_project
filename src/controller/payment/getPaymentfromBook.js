@@ -6,6 +6,59 @@ const getPaymenetList = async (req, res) => {
     try {
         let bookid = req.params.bookId
         let userId = req.decodeToken.user
+        let queryData = req.query;
+        let tempQuery = {};
+
+
+        //🔎🔎🔎 filtering here ------------------------------------
+        if (Object.keys(queryData).length > 0) {
+
+            // for category
+            if (queryData.category) {
+                tempQuery.category = {
+                    $in: queryData.category
+                }
+            }
+
+            // for type
+            if (queryData.type) {
+                tempQuery.type = {
+                    $in: queryData.type
+                }
+            }
+
+            //for amount range >xx<
+            if (queryData.amount) {
+                if (Array.isArray(queryData.amount)) {
+                    tempQuery.amount = {
+                        $gte: Number(queryData.amount[0]),
+                        $lte: Number(queryData.amount[1])
+                    }
+                } else {
+                    tempQuery.amount = {
+                        $gte: Number(queryData.amount)
+                    }
+                }
+            }
+
+            //for date range >xx<
+            if (queryData.date) {
+                if (Array.isArray(queryData.date)) {
+                    tempQuery.date = {
+                        $gte: new Date(queryData.date[0]).getTime(),
+                        $lte: new Date(queryData.date[1]).getTime()
+                    }
+                } else {
+                    tempQuery.date = new Date(queryData.date).getTime()
+                }
+            }
+
+
+
+        }
+
+
+
         let bookidverify = await bookschema.findOne({
             _id: bookid,
             isDeleted: false,
@@ -19,10 +72,13 @@ const getPaymenetList = async (req, res) => {
             status: false,
             message: "No Book found"
         })
-        let paymentList = await Payschema.find({
-            bookId: bookid,
-            userId: userId
-        }).select({
+
+
+
+        tempQuery.bookId = bookid
+        tempQuery.userId = userId
+
+        let paymentList = await Payschema.find(tempQuery).select({
             userId: 0,
             bookid: 0,
             isDeleted: 0,
@@ -37,7 +93,7 @@ const getPaymenetList = async (req, res) => {
         let outAmount = lodash.sum(outData);
         let total = Math.floor((inAmount - outAmount) * 100) / 100
 
-        let op = {
+        let output = {
             timeStamp: bookidverify.timeStamp,
             _id: bookidverify._id,
             name: bookidverify.name,
@@ -50,12 +106,13 @@ const getPaymenetList = async (req, res) => {
             paymentList
         }
 
-
-
         res.status(200).send({
-            op
+            status: true,
+            data: output
         })
+
     } catch (er) {
+        console.log(er)
         res.status(500).send(er.message)
     }
 }
