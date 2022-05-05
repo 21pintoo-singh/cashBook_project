@@ -36,6 +36,7 @@ const cashschema = new mongoose.Schema({
     },
     type: {
         type: String,
+        trim:true,
         required: true,
         enum: ["IN", "OUT"]
     },
