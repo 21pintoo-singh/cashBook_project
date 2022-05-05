@@ -10,6 +10,10 @@ const bookSchema = new mongoose.Schema({
         required: true
     },
     remark: String,
+    timeStamp: {
+        type: Number,
+        default: new Date().getTime()
+    },
     isDelete: {
         type: Boolean,
         default: false
