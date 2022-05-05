@@ -46,7 +46,7 @@ const authZ_forPayment = async (req, res, next) => {
         })
         if (!validate) return res.status(403).send({
             status: !true,
-            message: "Unauthorized access, Please try with a valid book ID"
+            message: "Unauthorized access, Please try with a valid Payment ID"
         })
         next();
     } catch (err) {
