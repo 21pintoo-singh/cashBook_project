@@ -15,7 +15,6 @@ const dbcheck = async (schema, query) => {
         return null
     }
 }
-
 const createpayment = async (req, res) => {
     try {
         let data = req.body

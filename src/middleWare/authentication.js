@@ -11,6 +11,7 @@ const authC = async (req, res, next) => {
 
         // varify token 
         const decodeToken = jwt.verify(token, "here-is-my-token-🤯")
+        console.log(decodeToken)
         if (!decodeToken) return res.status(401).send({
             status: !true,
             message: "Invalid token"
