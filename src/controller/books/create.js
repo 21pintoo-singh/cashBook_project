@@ -12,6 +12,7 @@ const createBook = async (req, res) => {
 
     try {
         // create user in users DB
+        data.timeStamp = new Date().getTime()
         const createBook = await bookModule.create(data);
         success(res, 201, createBook)
     } catch (err) {
