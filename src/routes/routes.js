@@ -11,20 +11,26 @@ const payment = require('../controller/payment/create')
 const delpay = require('../controller/payment/deletepayment')
 const listpay = require('../controller/payment/getPaymentfromBook')
 const allTags = require('../controller/auth/getTageOrPayTypes')
-
+const deleteUser=require('../controller/auth/deleteUser')
+const updateUser=require('../controller/auth/upDateUserDetails')
 const router = express.Router();
 
-
+//user
 router.post('/register', createAccount)
 router.post('/login', login)
 router.get('/user/categoryList', authC, allTags.categoryList)
 router.get('/user/paymentTypeList', authC, allTags.paymentTypeList)
+router.post('/user/paymentTypeList', authC)
+router.post('/user/update',authC,updateUser)
+router.delete('/user/delete',authC,deleteUser)
 
+//book
 router.post('/createBook', authC, createBook)
 router.get('/listBook', authC, getBookList)
 router.post('/updateBook/:bookId', authC, authZ.byBook, updateBook)
 router.delete('/deleteBook/:bookId', authC, authZ.byBook, deleteBook)
 
+//payment
 router.post('/CreatePayment', authC, payment.createpayment)
 router.delete('/deletePayment/:paymentId', authC, authZ.byPayment, delpay.del)
 router.get('/listofPayment/:bookId', authC, authZ.byBook, listpay)
