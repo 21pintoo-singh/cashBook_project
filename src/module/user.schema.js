@@ -27,9 +27,7 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     category: {
-        type: [{
-            tagName: String
-        }],
+        type: [String],
         required: true
     },
     paymentMethods: {

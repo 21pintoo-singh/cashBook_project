@@ -26,19 +26,8 @@ const createAccount = async (req, res) => {
 
 
     // 👇 add default values
-    data.category = [{
-        tagName: "Salary"
-    }, {
-        tagName: "Sale"
-    }, {
-        tagName: "Billsary"
-    }, {
-        tagName: "Maintenance"
-    }]
-
-    data.paymentMethods = ["Cash", "Cheque", "NetBanking", "UPI Payment", "Google Pay", "PhonePe", "Paytm"];
-
-
+    data.category = ["Salary", "Sale", "Billsary", "Maintenance"]
+    data.paymentMethods = ["Cash", "Cheque", "NetBanking", "UPI Payment"];
 
     try {
         //👇 create user in users DB
