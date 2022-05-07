@@ -5,7 +5,7 @@ const getBooks = async (req, res) => {
     //👇 my query
     let query = {
         userId: req.decodeToken.user,
-        isDelete: !true
+        isDeleted: !true
     };
 
     //👇 for query part

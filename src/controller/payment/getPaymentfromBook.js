@@ -73,6 +73,7 @@ const getPaymenetList = async (req, res) => {
 
     tempQuery.bookId = bookid;
     tempQuery.userId = userId;
+    tempQuery.isDeleted = false;
 
     let paymentList = await Payschema.find(tempQuery).select({
       userId: 0,
@@ -100,7 +101,7 @@ const getPaymenetList = async (req, res) => {
       name: bookidverify.name,
       userId: bookidverify.userId,
       remark: bookidverify.remark,
-      isDelete: bookidverify.isDeleted,
+      isDeleted: bookidverify.isDeleted,
       inAmount,
       outAmount,
       total,

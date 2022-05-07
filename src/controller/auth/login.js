@@ -21,7 +21,7 @@ const login = async (req, res) => {
         if (!findUser) return unsuccess(res, 401, "Wrong email address and password")
 
         // if user deleted
-        if (findUser.isDelete) return unsuccess(res, 404, "This account is unavailable OR may be deleted")
+        if (findUser.isDeleted) return unsuccess(res, 404, "This account is unavailable OR may be deleted")
 
         // generate Token
         const token = jwt.sign({

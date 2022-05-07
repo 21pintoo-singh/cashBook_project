@@ -6,7 +6,7 @@ const categoryList = async (req, res) => {
 
         const userData = await userModule.findOne({
             _id: userId,
-            isDelete: false
+            isDeleted: false
         }).catch(_ => null)
 
         //👇 check 'categoryListing' is exist OR 'category' exist OR the 'length'
@@ -35,7 +35,7 @@ const paymentTypeList = async (req, res) => {
 
         const userData = await userModule.findOne({
             _id: userId,
-            isDelete: false
+            isDeleted: false
         }).catch(_ => null)
 
         //👇 check 'paymentMethodsListing' is exist OR 'paymentMethods' exist OR the 'length'

@@ -14,7 +14,7 @@ const updateBook = async (req, res) => {
     const query = {
         userId: req.decodeToken.user,
         _id: bookId,
-        isDelete: !true
+        isDeleted: !true
     }
 
     try {

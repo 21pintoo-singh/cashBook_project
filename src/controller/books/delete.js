@@ -11,7 +11,7 @@ const deleteBook = async (req, res) => {
     const query = {
         userId: req.decodeToken.user,
         _id: bookId,
-        isDelete: !true
+        isDeleted: !true
     }
 
 
@@ -21,10 +21,10 @@ const deleteBook = async (req, res) => {
         if (!bookObj) return unsuccess(res, 404, "No book found")
 
         //👇 overide data
-        bookObj.isDelete = true;
+        bookObj.isDeleted = true;
         bookObj.save();
 
-        success(res, 200, "Book deleted successfull")
+        success(res, 200, "Book delete successfull")
     } catch (err) {
         unsuccess(res, 500, err.message)
     }
