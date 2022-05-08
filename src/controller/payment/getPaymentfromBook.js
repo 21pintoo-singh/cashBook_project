@@ -75,7 +75,9 @@ const getPaymenetList = async (req, res) => {
     tempQuery.userId = userId;
     tempQuery.isDeleted = false;
 
-    let paymentList = await Payschema.find(tempQuery).select({
+    let paymentList = await Payschema.find(tempQuery).sort([
+      ['date', -1]
+    ]).select({
       userId: 0,
       bookid: 0,
       isDeleted: 0,
