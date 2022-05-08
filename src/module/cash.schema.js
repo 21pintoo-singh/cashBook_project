@@ -22,6 +22,11 @@ const cashschema = new mongoose.Schema({
         trim: true,
         required: "title is mandatory"
     },
+    paymentType: {
+        type: String,
+        trim: true,
+        required: "Payment type is mandatory"
+    },
     userId: {
         type: Objectid,
         trim: true,
