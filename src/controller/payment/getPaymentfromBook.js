@@ -92,9 +92,15 @@ const getPaymenetList = async (req, res) => {
     const outData = paymentList
       .filter((x) => (x.type == "OUT" ? true : false))
       .map((x) => x.amount);
+
     let inAmount = lodash.sum(inData);
     let outAmount = lodash.sum(outData);
     let total = Math.floor((inAmount - outAmount) * 100) / 100;
+
+    let [...sortedAmount] = new Set([...inData, ...outData])
+    let maxAmount = 0
+    if (sortedAmount.length > 0) maxAmount = Math.max(...sortedAmount)
+
 
     //object to make list of payments[out]
     let output = {
@@ -107,7 +113,8 @@ const getPaymenetList = async (req, res) => {
       inAmount,
       outAmount,
       total,
-      paymentList,
+      maxAmount,
+      paymentList
     };
 
     res.status(200).send({
