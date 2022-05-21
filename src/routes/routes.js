@@ -2,6 +2,9 @@ const express = require('express');
 const authC = require('../middleWare/authentication')
 const authZ = require('../middleWare/authorization')
 const createAccount = require('../controller/auth/createAccount')
+const getUser = require('../controller/auth/viewUserProfile')
+const delCategory=require('../controller/auth/deleteUsersCategory')
+const delpaymentMethods=require('../controller/auth/delUsersPaymentMethods')
 const login = require('../controller/auth/login')
 const createBook = require('../controller/books/create')
 const getBookList = require('../controller/books/getList')
@@ -18,12 +21,15 @@ const router = express.Router();
 //user
 router.post('/register', createAccount)
 router.post('/login', login)
+router.get('/viewProfile',authC,getUser.viewProfile,)
 router.get('/user/categoryList', authC, allTags.categoryList)
 router.get('/user/paymentTypeList', authC, allTags.paymentTypeList)
 router.get('/user/allTagsList', authC, allTags.getPaymentsAndCetagoryList)
 router.post('/user/paymentTypeList', authC)
 router.post('/user/update',authC,updateUser)
 router.delete('/user/delete',authC,deleteUser)
+router.delete('/user/deleteCategory',authC,delCategory.deleteCategory)
+router.delete('/user/deletePaymentmethods',authC,delpaymentMethods.deletePayment)
 
 //book
 router.post('/createBook', authC, createBook)
