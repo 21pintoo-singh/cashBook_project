@@ -18,7 +18,7 @@ const login = async (req, res) => {
         });
 
         // if unavailable
-        if (!findUser) return unsuccess(res, 401, "Wrong email address and password")
+        if (!findUser) return unsuccess(res, 401, "Wrong email address or password")
 
         // if user deleted
         if (findUser.isDeleted) return unsuccess(res, 404, "This account is unavailable OR may be deleted")
