@@ -1,5 +1,4 @@
 const cashschema = require('../../module/cash.schema')
-const userSchema = require('../../module/user.schema')
 const bookSchema = require('../../module/book.schema')
 const success = (res, status, msg) => {
     return res.status(status).send({ status: true, data: msg })

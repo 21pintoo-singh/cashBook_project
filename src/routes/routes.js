@@ -12,6 +12,7 @@ const updateBook = require('../controller/books/update')
 const deleteBook = require('../controller/books/delete')
 const payment = require('../controller/payment/create')
 const delpay = require('../controller/payment/deletepayment')
+const viewpayment=require('../controller/payment/viewEachPayment')
 const listpay = require('../controller/payment/getPaymentfromBook')
 const allTags = require('../controller/auth/getTageOrPayTypes')
 const addCategory = require('../controller/auth/addCategory')
@@ -45,6 +46,7 @@ router.delete('/deleteBook/:bookId', authC, authZ.byBook, deleteBook)
 
 //payment
 router.post('/CreatePayment', authC, payment.createpayment)
+router.get('/viewpayment/:paymentId',authC,authZ.byPayment,viewpayment.viewPayments)
 router.delete('/deletePayment/:paymentId', authC, authZ.byPayment, delpay.del)
 router.get('/listofPayment/:bookId', authC, authZ.byBook, listpay)
 
