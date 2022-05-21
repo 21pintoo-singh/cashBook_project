@@ -25,6 +25,13 @@ const getPaymenetList = async (req, res) => {
         };
       }
 
+      // for type
+      if (queryData.paymentType) {
+        tempQuery.paymentType = {
+          $in: queryData.paymentType,
+        };
+      }
+
       //for amount range >xx<
       if (queryData.amount) {
         if (Array.isArray(queryData.amount)) {
@@ -98,8 +105,6 @@ const getPaymenetList = async (req, res) => {
     let total = Math.floor((inAmount - outAmount) * 100) / 100;
 
     let [...sortedAmount] = new Set([...inData, ...outData])
-    let maxAmount = 0
-    if (sortedAmount.length > 0) maxAmount = Math.max(...sortedAmount)
 
 
     //object to make list of payments[out]
@@ -113,7 +118,6 @@ const getPaymenetList = async (req, res) => {
       inAmount,
       outAmount,
       total,
-      maxAmount,
       paymentList
     };
 
