@@ -26,7 +26,7 @@ const addPaymentMethods = async (req, res) => {
         await getUser.save();
         res.status(200).send({
             status: true,
-            Data: getUser.paymentMethods
+            data: getUser.paymentMethods
         })
     } catch (_) {
         res.status(500).send({

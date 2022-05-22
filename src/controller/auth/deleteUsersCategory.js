@@ -11,7 +11,7 @@ const deleteCategory = async (req, res) => {
         if (checkcategory == -1) return res.status(404).send({ status: false, message: "Category not found" })
         getUser.category.splice(checkcategory, 1)
         await getUser.save();
-        res.status(200).send({ status: true, Data: getUser.category })
+        res.status(200).send({ status: true, data: getUser.category })
     }
     catch (e) {
         res.status(500).send({ status: false, message: e.message })

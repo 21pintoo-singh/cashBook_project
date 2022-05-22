@@ -11,7 +11,7 @@ const deletePayment = async (req, res) => {
         if (checkpaymentmethod == -1) return res.status(404).send({ status: false, message: "paymentMethods not found" })
         getUser.paymentMethods.splice(checkpaymentmethod, 1)
         await getUser.save();
-        res.status(200).send({ status: true, Data: getUser.paymentMethods })
+        res.status(200).send({ status: true, data: getUser.paymentMethods })
     }
     catch (e) {
         res.status(500).send({ status: false, message: e.message })
