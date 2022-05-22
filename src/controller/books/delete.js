@@ -1,4 +1,6 @@
 const bookModule = require('../../module/book.schema')
+const cashschema = require('../../module/cash.schema')
+
 
 const deleteBook = async (req, res) => {
 
@@ -23,8 +25,9 @@ const deleteBook = async (req, res) => {
         //👇 overide data
         bookObj.isDeleted = true;
         bookObj.save();
-
-        success(res, 200, "Book delete successfull")
+        //deleting payments related to that book
+        await cashschema.updateMany({ userId: req.decodeToken.user, bookId: bookId, isDeleted: false }, { $set: { isDeleted: true } })
+        success(res, 200, "Book delete successfully.")
     } catch (err) {
         unsuccess(res, 500, err.message)
     }
