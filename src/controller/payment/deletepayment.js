@@ -7,7 +7,7 @@ const del = async (req, res) => {
         let check = await cashschema.findById(del)
         if (!check) return res.status(403).send({ status: false, message: "Paymentid Invalid" })
         if (check.isDeleted === true) return res.status(403).send({ status: false, message: "Payment is already deleted" })
-        await cashschema.updateOne({ _id: del, userId: userid }, { $set: { isDeleted: true } })
+        await cashschema.deleteOne({ _id: del, userId: userid })
         return res.status(200).send({ status: true, data: "Payment deleted successfully" })
     }
     catch (er) {

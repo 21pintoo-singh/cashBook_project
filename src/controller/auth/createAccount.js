@@ -26,7 +26,7 @@ const createAccount = async (req, res) => {
 
 
     // 👇 add default values
-    data.category = ["Salary", "Sale", "Billsary", "Maintenance"]
+    data.category = ["Salary", "Sale", "Maintenance","Food","Travel"]
     data.paymentMethods = ["Cash", "Cheque", "NetBanking", "UPI Payment"];
 
     try {

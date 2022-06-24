@@ -13,7 +13,7 @@ const deleteBook = async (req, res) => {
     const query = {
         userId: req.decodeToken.user,
         _id: bookId,
-        isDeleted: !true
+        //isDeleted: !true
     }
 
 
@@ -21,12 +21,10 @@ const deleteBook = async (req, res) => {
         //👇 create user in users DB
         const bookObj = await bookModule.findOne(query);
         if (!bookObj) return unsuccess(res, 404, "No book found")
-
-        //👇 overide data
-        bookObj.isDeleted = true;
-        bookObj.save();
+        //delete books
+        await bookModule.deleteOne({ userId: req.decodeToken.user, _id: bookId })
         //deleting payments related to that book
-        await cashschema.updateMany({ userId: req.decodeToken.user, bookId: bookId, isDeleted: false }, { $set: { isDeleted: true } })
+        await cashschema.deleteMany({ userId: req.decodeToken.user, bookId: bookId })
         success(res, 200, "Book delete successfully.")
     } catch (err) {
         unsuccess(res, 500, err.message)
