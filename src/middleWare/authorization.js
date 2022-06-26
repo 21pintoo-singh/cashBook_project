@@ -1,5 +1,5 @@
 const bookModule = require('../module/book.schema')
-const Paymentmodule=require('../module/cash.schema')
+const Paymentmodule = require('../module/cash.schema')
 
 
 const authZ_forBook = async (req, res, next) => {
@@ -36,7 +36,7 @@ const authZ_forPayment = async (req, res, next) => {
         let userID = req.decodeToken.user;
         if (!paymentId) return res.status(400).send({
             status: !true,
-            message: "book id Must be required"
+            message: "paymentid Must be required"
         })
 
         // validate books userId with tokens UserId
@@ -44,6 +44,7 @@ const authZ_forPayment = async (req, res, next) => {
             userId: userID,
             _id: paymentId
         })
+        req.validate = validate
         if (!validate) return res.status(403).send({
             status: !true,
             message: "Unauthorized access, Please try with a valid Payment ID"
