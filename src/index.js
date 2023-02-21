@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const routes = require('./routes/routes.js')
 const mongoose = require('mongoose')
 const logs = require('./middleWare/log')
-
+mongoose.set('strictQuery', false);
 const app = express()
 const port = process.env.PORT || 4000
 
